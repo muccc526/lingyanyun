@@ -29,7 +29,7 @@ custom_goods_require_login();
           <label>购买数量</label>
           <input class="form-control" type="number" min="1" v-model="quantity">
         </div>
-        <div class="form-group" v-for="field in fields" :key="field.name">
+        <div class="form-group" v-for="(field, fieldIndex) in fields" :key="fieldKey(field, fieldIndex)">
           <label>{{field.label || field.name}}</label>
           <select class="form-control" v-if="field.type == 'select'" v-model="input[field.name]">
             <option value="">请选择</option>
@@ -102,7 +102,13 @@ new Vue({
     },
     normalizeConfig: function(config) {
       config = config || {};
-      var fields = Array.isArray(config.fields) ? config.fields.slice() : [];
+      var normalized = {};
+      var fields = [];
+      if (Array.isArray(config.fields)) {
+        for (var f = 0; f < config.fields.length; f++) {
+          fields.push(Object.assign({}, config.fields[f]));
+        }
+      }
       if (!fields.length && Array.isArray(config.inputs)) {
         for (var i = 0; i < config.inputs.length; i++) {
           var input = Object.assign({}, config.inputs[i]);
@@ -121,10 +127,13 @@ new Vue({
           fields.push(select);
         }
       }
-      config.fields = fields;
-      config.price_rule = config.price_rule || {factors: ['count']};
-      config.price_rule.factors = config.price_rule.factors || ['count'];
-      return config;
+      normalized.fields = fields;
+      normalized.price_rule = config.price_rule || {factors: ['count']};
+      normalized.price_rule.factors = normalized.price_rule.factors || ['count'];
+      return normalized;
+    },
+    fieldKey: function(field, index) {
+      return (this.current.cid || 'none') + '_' + (field.name || 'field') + '_' + index + '_' + (field.type || 'text');
     },
     loadGoods: function() {
       this.$http.post('/apisub.php?act=custom_goods_public_list', {}, {emulateJSON: true}).then(function(res) {
@@ -132,18 +141,23 @@ new Vue({
       });
     },
     selectGoods: function() {
+      this.current = {};
+      this.fields = [];
+      this.input = {};
       this.current = this.goods.find(function(item) { return item.cid == this.cid; }.bind(this)) || {};
       var config = this.parseConfig();
-      this.fields = config.fields || [];
-      if (!Array.isArray(this.fields)) {
-        this.fields = Object.keys(this.fields).map(function(key) { return this.fields[key]; }.bind(this));
+      var nextFields = config.fields || [];
+      if (!Array.isArray(nextFields)) {
+        nextFields = Object.keys(nextFields).map(function(key) { return nextFields[key]; });
       }
-      this.input = {};
-      for (var i = 0; i < this.fields.length; i++) {
-        var field = this.fields[i];
+      var nextInput = {};
+      for (var i = 0; i < nextFields.length; i++) {
+        var field = nextFields[i];
         if (!field.name) continue;
-        this.$set(this.input, field.name, '');
+        nextInput[field.name] = '';
       }
+      this.fields = nextFields;
+      this.input = nextInput;
     },
     submit: function() {
       if (!this.cid) { this.$message.error('请选择商品'); return; }
