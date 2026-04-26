@@ -104,6 +104,38 @@ function custom_goods_decode_input_config($input_config)
     }
     if (!isset($config['fields']) || !is_array($config['fields'])) {
         $config['fields'] = array();
+        if (isset($config['inputs']) && is_array($config['inputs'])) {
+            foreach ($config['inputs'] as $field) {
+                if (!is_array($field)) {
+                    continue;
+                }
+                if (!isset($field['type']) || $field['type'] == '') {
+                    $field['type'] = 'text';
+                }
+                if (!isset($field['options']) || !is_array($field['options'])) {
+                    $field['options'] = array();
+                }
+                $config['fields'][] = $field;
+            }
+        }
+        if (isset($config['selects']) && is_array($config['selects'])) {
+            foreach ($config['selects'] as $field) {
+                if (!is_array($field)) {
+                    continue;
+                }
+                $field['type'] = 'select';
+                if (!isset($field['label']) || $field['label'] == '') {
+                    $field['label'] = isset($field['name']) ? $field['name'] : '选项';
+                }
+                if (!isset($field['tips'])) {
+                    $field['tips'] = '';
+                }
+                if (!isset($field['options']) || !is_array($field['options'])) {
+                    $field['options'] = array();
+                }
+                $config['fields'][] = $field;
+            }
+        }
     }
     $config['fields'] = array_values($config['fields']);
     if (!isset($config['price_rule']) || !is_array($config['price_rule'])) {

@@ -78,14 +78,14 @@ new Vue({
       var parsed = null;
       var config = this.current.input_config_data || {};
       if (typeof config === 'object' && config.fields && config.fields.length) {
-        return config;
+        return this.normalizeConfig(config);
       }
       config = this.current.input_config || {};
-      if (typeof config === 'object') return config;
+      if (typeof config === 'object') return this.normalizeConfig(config);
       try {
         parsed = JSON.parse(config || '{}');
         if (typeof parsed === 'string') parsed = JSON.parse(parsed);
-        return parsed || {};
+        return this.normalizeConfig(parsed || {});
       } catch (e) {
         try {
           var normalized = String(config || '')
@@ -94,11 +94,37 @@ new Vue({
             .replace(/\\"/g, '"');
           parsed = JSON.parse(normalized || '{}');
           if (typeof parsed === 'string') parsed = JSON.parse(parsed);
-          return parsed || {};
+          return this.normalizeConfig(parsed || {});
         } catch (e2) {
           return {};
         }
       }
+    },
+    normalizeConfig: function(config) {
+      config = config || {};
+      var fields = Array.isArray(config.fields) ? config.fields.slice() : [];
+      if (!fields.length && Array.isArray(config.inputs)) {
+        for (var i = 0; i < config.inputs.length; i++) {
+          var input = Object.assign({}, config.inputs[i]);
+          input.type = input.type || 'text';
+          input.options = input.options || [];
+          fields.push(input);
+        }
+      }
+      if (Array.isArray(config.selects)) {
+        for (var j = 0; j < config.selects.length; j++) {
+          var select = Object.assign({}, config.selects[j]);
+          select.type = 'select';
+          select.label = select.label || select.name || '选项';
+          select.tips = select.tips || '';
+          select.options = select.options || [];
+          fields.push(select);
+        }
+      }
+      config.fields = fields;
+      config.price_rule = config.price_rule || {factors: ['count']};
+      config.price_rule.factors = config.price_rule.factors || ['count'];
+      return config;
     },
     loadGoods: function() {
       this.$http.post('/apisub.php?act=custom_goods_public_list', {}, {emulateJSON: true}).then(function(res) {
