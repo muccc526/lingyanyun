@@ -51,6 +51,11 @@ source custom_goods/install.sql;
 
 保存后用户可在“自定义商品下单”页面看到。
 
+本站自定义商品的代理价格规则为：
+
+- 乘法：`price * addprice * 5`
+- 加法：`price + addprice * 5`
+
 ## 6. 用户下单
 
 用户进入：`自定义商品下单`

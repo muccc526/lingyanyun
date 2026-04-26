@@ -74,7 +74,14 @@ function custom_goods_upstream_request($act, $data = array())
 
 function custom_goods_decode_input_config($input_config)
 {
-    $config = json_decode((string)$input_config, true);
+    if (is_array($input_config)) {
+        $config = $input_config;
+    } else {
+        $config = json_decode((string)$input_config, true);
+        if (is_string($config)) {
+            $config = json_decode($config, true);
+        }
+    }
     if (!is_array($config)) {
         return array('fields' => array(), 'price_rule' => array('factors' => array('count')));
     }
@@ -93,7 +100,7 @@ function custom_goods_decode_input_config($input_config)
 function custom_goods_user_unit_price($goods, $user)
 {
     $price = floatval($goods['price']);
-    $addprice = floatval($user['addprice']);
+    $addprice = floatval($user['addprice']) * 5;
     if ($goods['yunsuan'] == '+') {
         return round($price + $addprice, 2);
     }
@@ -175,6 +182,7 @@ function custom_goods_get_public_list($user, $only_id = 0)
             'fenlei' => 'custom',
             'content' => $row['content'],
             'input_config' => $row['input_config'],
+            'input_config_data' => custom_goods_decode_input_config($row['input_config']),
             'status' => $row['status'],
             'miaoshua' => 0
         );
@@ -195,6 +203,9 @@ function custom_goods_sync_from_upstream()
     $count = 0;
     foreach ($result['data'] as $item) {
         $input_config = isset($item['input_config']) ? $item['input_config'] : '';
+        if (is_array($input_config)) {
+            $input_config = json_encode($input_config, JSON_UNESCAPED_UNICODE);
+        }
         $cid = isset($item['cid']) ? $item['cid'] : '';
         if ($input_config == '' || !preg_match('/^custom_[0-9]+$/', $cid)) {
             continue;

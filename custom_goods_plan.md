@@ -68,8 +68,8 @@ custom_goods/
 
 先按本站代理加价规则计算用户单价：
 
-- `yunsuan = "*"`：`price * addprice`
-- `yunsuan = "+"`：`price + addprice`
+- `yunsuan = "*"`：`price * addprice * 5`
+- `yunsuan = "+"`：`price + addprice * 5`
 - 其他默认乘法
 
 再按自定义商品计价因子计算总价：

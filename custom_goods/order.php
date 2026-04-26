@@ -40,6 +40,9 @@ custom_goods_require_login();
           <input v-else-if="field.type == 'datetime'" class="form-control" type="datetime-local" v-model="input[field.name]">
           <input v-else class="form-control" type="text" v-model="input[field.name]" :placeholder="field.tips || ''">
         </div>
+        <div class="alert alert-warning" v-if="current.cid && fields.length == 0">
+          当前商品未解析到表单配置，请检查该商品的 input_config。
+        </div>
         <p v-if="current.cid">预计扣费：<b style="color:red">{{totalPrice}}</b> 积分</p>
         <button class="btn btn-primary" @click="submit">提交订单</button>
       </div>
@@ -72,7 +75,15 @@ new Vue({
   },
   methods: {
     parseConfig: function() {
-      try { return JSON.parse(this.current.input_config || '{}'); } catch (e) { return {}; }
+      var config = this.current.input_config_data || this.current.input_config || {};
+      if (typeof config === 'object') return config;
+      try {
+        config = JSON.parse(config || '{}');
+        if (typeof config === 'string') config = JSON.parse(config);
+        return config || {};
+      } catch (e) {
+        return {};
+      }
     },
     loadGoods: function() {
       this.$http.post('/apisub.php?act=custom_goods_public_list', {}, {emulateJSON: true}).then(function(res) {
@@ -84,6 +95,11 @@ new Vue({
       var config = this.parseConfig();
       this.fields = config.fields || [];
       this.input = {};
+      for (var i = 0; i < this.fields.length; i++) {
+        var field = this.fields[i];
+        if (!field.name) continue;
+        this.$set(this.input, field.name, '');
+      }
     },
     submit: function() {
       if (!this.cid) { this.$message.error('请选择商品'); return; }
