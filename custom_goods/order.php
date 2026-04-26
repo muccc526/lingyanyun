@@ -106,7 +106,7 @@ new Vue({
       var fields = [];
       if (Array.isArray(config.fields)) {
         for (var f = 0; f < config.fields.length; f++) {
-          fields.push(Object.assign({}, config.fields[f]));
+          this.pushUniqueField(fields, Object.assign({}, config.fields[f]));
         }
       }
       if (!fields.length && Array.isArray(config.inputs)) {
@@ -114,7 +114,7 @@ new Vue({
           var input = Object.assign({}, config.inputs[i]);
           input.type = input.type || 'text';
           input.options = input.options || [];
-          fields.push(input);
+          this.pushUniqueField(fields, input);
         }
       }
       if (Array.isArray(config.selects)) {
@@ -124,13 +124,23 @@ new Vue({
           select.label = select.label || select.name || '选项';
           select.tips = select.tips || '';
           select.options = select.options || [];
-          fields.push(select);
+          this.pushUniqueField(fields, select);
         }
       }
       normalized.fields = fields;
       normalized.price_rule = config.price_rule || {factors: ['count']};
       normalized.price_rule.factors = normalized.price_rule.factors || ['count'];
       return normalized;
+    },
+    pushUniqueField: function(fields, field) {
+      if (!field || !field.name) return;
+      var type = field.type || 'text';
+      for (var i = 0; i < fields.length; i++) {
+        if (fields[i].name === field.name && (fields[i].type || 'text') === type) {
+          return;
+        }
+      }
+      fields.push(field);
     },
     fieldKey: function(field, index) {
       return (this.current.cid || 'none') + '_' + (field.name || 'field') + '_' + index + '_' + (field.type || 'text');

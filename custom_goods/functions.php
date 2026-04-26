@@ -137,6 +137,25 @@ function custom_goods_decode_input_config($input_config)
             }
         }
     }
+    $seen_fields = array();
+    $deduped_fields = array();
+    foreach ($config['fields'] as $field) {
+        if (!is_array($field)) {
+            continue;
+        }
+        $name = isset($field['name']) ? $field['name'] : '';
+        $type = isset($field['type']) ? $field['type'] : 'text';
+        $key = $name . ':' . $type;
+        if ($name != '' && isset($seen_fields[$key])) {
+            continue;
+        }
+        if ($name != '') {
+            $seen_fields[$key] = true;
+        }
+        $deduped_fields[] = $field;
+    }
+    $config['fields'] = $deduped_fields;
+    unset($config['inputs'], $config['selects']);
     $config['fields'] = array_values($config['fields']);
     if (!isset($config['price_rule']) || !is_array($config['price_rule'])) {
         $config['price_rule'] = array('factors' => array('count'));
