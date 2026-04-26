@@ -1,0 +1,203 @@
+@font-face {
+  font-family: PlastoTrial_ExtraLight;
+  font-weight: 700;
+  src: url(./asset/font/PlastoTrial-ExtraLight.otf) format("truetype");
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: PlastoTrial_ExtraBold;
+  font-weight: 700;
+  src: url(./asset/font/PlastoTrial-ExtraBold.otf) format("truetype");
+  text-rendering: optimizeLegibility;
+}
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: rgb(201, 208, 213);
+}
+
+.box {
+  width: 90vw;
+  height: 90vh;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+}
+.box .forms {
+  width: 50%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 10px 0 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  position: relative;
+}
+.box .forms .form-wrapper {
+  width: 50%;
+}
+.box .forms .form-wrapper .title {
+  font-size: 20px;
+  margin: 4% 0;
+  font-family: PlastoTrial_ExtraBold;
+}
+.box .forms .form-wrapper .title h1 {
+  margin: 5px 0;
+}
+.box .forms .form-wrapper .title span {
+  color: #838383;
+  font-family: PlastoTrial_ExtraLight;
+}
+.box .forms .form-wrapper .input-wrapper {
+  width: 100%;
+}
+.box .forms .form-wrapper .input-wrapper .input-item .input-title {
+  display: inline-block;
+  margin: 10px 0;
+  font-family: PlastoTrial_ExtraBold;
+}
+.box .forms .form-wrapper .input-wrapper .input-item .ipt {
+  display: flex;
+  width: 100%;
+  height: 40px;
+  border: 1px solid rgb(207, 209, 212);
+  border-radius: 8px;
+  outline: none;
+  padding: 10px;
+  box-sizing: border-box;
+  font-family: PlastoTrial_ExtraBold;
+  transition: 0.3s;
+}
+.box .forms .form-wrapper .input-wrapper .input-item .ipt:hover {
+  border: 1px solid #000;
+}
+.box .forms .form-wrapper .input-wrapper .input-item .tips {
+  margin: 5px 0;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 100;
+}
+.box .forms .form-wrapper .btn {
+  width: 100%;
+  height: 50px;
+  background-color: #000;
+  border: 0;
+  font-size: 18px;
+  color: #fff;
+  margin: 10px 0;
+  border-radius: 8px;
+  font-family: PlastoTrial_ExtraBold;
+  cursor: pointer;
+}
+.box .forms .form-wrapper .other-login {
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  text-align: center;
+  font-weight: 600;
+  margin: 10px 0;
+  transition: 0.5s;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid rgb(207, 209, 212);
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.box .forms .form-wrapper .other-login svg {
+  width: 30px;
+  height: 30px;
+  fill: #000;
+  vertical-align: middle;
+}
+.box .forms .form-wrapper .other-login span {
+  vertical-align: middle;
+}
+.box .forms .form-wrapper .other-login:hover {
+  background-color: #fff;
+  border: 1px solid #000;
+  box-shadow: 1px 10px 32px 1px rgba(186, 175, 221, 0.37);
+}
+.box .forms .form-wrapper .login-tips {
+  text-align: center;
+  color: #555454;
+  font-family: PlastoTrial_ExtraLight;
+}
+.box .forms .form-wrapper .login-tips span {
+  cursor: pointer;
+  font-family: PlastoTrial_ExtrBlod;
+  color: #000;
+}
+.box .bg {
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.box .bg .text {
+  width: 100%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  color: #fff;
+  font-size: 40px;
+  text-align: center;
+  font-family: PlastoTrial_ExtraBold;
+  letter-spacing: 3px;
+  word-spacing: 10px;
+}
+.box .bg .img-one {
+  opacity: 1;
+}
+.box .bg .img-two {
+  opacity: 0;
+}
+.box .bg img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  animation: photo-animation 120s;
+  animation-direction: alternate;
+  transition: 3s;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+@keyframes photo-animation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@media (max-width: 1024px) {
+  .box {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+  .box .forms {
+    width: 100%;
+    border-radius: 0;
+  }
+  .box .forms .form-wrapper {
+    width: 75%;
+  }
+  .box .bg {
+    display: none;
+  }
+}/*# sourceMappingURL=style.css.map */

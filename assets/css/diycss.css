@@ -1,0 +1,218 @@
+.wztx{color:#4cc134; 
+    	margin: 10px;
+    	animation: changeshadow 1s  ease-in  infinite ;
+    	/* 其它浏览器兼容性前缀 */
+	    -webkit-animation: changeshadow 1s linear infinite;
+	    -moz-animation: changeshadow 1s linear infinite;
+	    -ms-animation: changeshadow 1s linear infinite;
+	    -o-animation: changeshadow 1s linear infinite;}
+   @keyframes changeshadow {  
+        0%{ text-shadow: 0 0 4px #4cc134}  
+        50%{ text-shadow: 0 0 40px #4cc134}  
+        100%{ text-shadow: 0 0 4px #4cc134}  
+    }
+    /* 添加兼容性前缀 */
+	@-webkit-keyframes changeshadow {
+	  0%{ text-shadow: 0 0 4px #4cc134}  
+          50%{ text-shadow: 0 0 40px #4cc134}  
+          100%{ text-shadow: 0 0 4px #4cc134}  
+	}
+	@-moz-keyframes changeshadow {
+	    0%{ text-shadow: 0 0 4px #4cc134}  
+            50%{ text-shadow: 0 0 40px #4cc134}  
+            100%{ text-shadow: 0 0 4px #4cc134}  
+	}
+	@-ms-keyframes changeshadow {
+	    0%{ text-shadow: 0 0 4px #4cc134}  
+            50%{ text-shadow: 0 0 40px #4cc134}  
+            100%{ text-shadow: 0 0 4px #4cc134}  
+	}
+	@-o-keyframes changeshadow {
+	    0%{ text-shadow: 0 0 4px #4cc134}  
+            50%{ text-shadow: 0 0 40px #4cc134}  
+            100%{ text-shadow: 0 0 4px #4cc134}  
+	}
+/*活动奖励*/
+.layui-layer-hdjl .layui-layer-title{
+	background: #ad0101;
+    color: #fff;
+    border: none;
+}
+.layui-layer-hdjl .layui-layer-btn .layui-layer-btn0{
+	border-color: #ad0101;
+    background-color: #ad0101;
+    color: #fff;
+}
+/*红*/
+.layui-layer-del .layui-layer-title{
+	background: #ad0101;
+    color: #fff;
+    border: none;
+}
+.layui-layer-del .layui-layer-btn .layui-layer-btn0{
+	border-color: #ad0101;
+    background-color: #ad0101;
+    color: #fff;
+}
+/*紫*/
+.layui-layer-zi .layui-layer-title{
+	background: #6254b2;
+    color: #fff;
+    border: none;
+}
+.layui-layer-zi .layui-layer-btn .layui-layer-btn0{
+	border-color: #6254b2;
+    background-color: #6254b2;
+    color: #fff;
+}
+/*绿*/
+.layui-layer-lv .layui-layer-title{
+	background: #009f95;
+    color: #fff;
+    border: none;
+}
+.m-b{margin-bottom:0;}
+.layui-layer-lv .layui-layer-btn .layui-layer-btn0{
+	border-color: #009f95;
+    background-color: #009f95;
+    color: #fff;
+}
+/*等级图标*/
+.ico{width:26px;height:16px;background-image:url(../images/vip.png);display:inline-block;
+	margin-right:8px;position:relative;top:4px;
+}
+#liang{width:14px;height:15px;background:url(../images/liang.png) no-repeat center;display:inline-block;
+	position:relative;top:1px;margin-left:5px;}
+.yhlogo{
+	background:url(../images/logo.png) no-repeat center;
+	height:135px;
+}
+.v1{background-position:0 0;}
+.v2{background-position:-25px 0;}
+.v3{background-position:-52px 0;}
+.v4{background-position:-79px 0;}
+.v5{background-position:-106px 0;}
+.v6{background-position:-133px 0;}
+.v7{background-position:-160px 0;}
+.v8{background-position:-187px 0;}
+
+/*其他修改*/
+.cxsq{margin:8px 0;}
+.media{margin-top:8px;border-bottom: 1px dotted #edf1f2;}
+.ggs{border:0;margin:0;}
+.ggs .wrapper-lg{padding:20px;}
+.ggrq{float:right;}
+.fa-stack-2x{font-size:22px;}
+.ggico{
+	position:relative;
+	bottom:0px;
+}
+.gg{max-height:248px;overflow:hidden;overflow-y:auto;}
+.fa-stack{width:15px;height:30px;}
+.nrs{
+	display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 1;
+overflow: hidden;
+width:70%;
+float:left;
+}
+.list-group-item .badge{
+	font-family:arial;
+}
+.bg-success{color:#fff;}
+.panel-default > .panel-heading .cg{color:#fff;background-color:#333;}
+.panel-default > .panel-heading .zxs{color:#fff;background-color:#f05050;}
+.panel-default > .panel-heading .sqs{color:#fff;background-color:#23b7e5;}
+.float_r{float:right!important;}
+.float_l{float:left!important;}
+
+/*排行*/
+.yhph .w-md{width:auto;}
+.yhph .wrapper-sm{padding:0;}
+.yhph .glyphicon{margin-right:5px;}
+.yhph .nav-tabs > li{width:50%}
+.yhph .nav-tabs > li >a{font-size:13px;}
+.phtb{text-align:center;}
+/*自定义bootstrap 按钮*/
+.btn-success1 {
+  color: #ffffff !important;
+  background-color: #99c73e;
+  border-color: #99c73e;
+}
+
+.btn-success1:hover,
+.btn-success1:focus,
+.btn-success1:active,
+.btn-success1.active,
+.open .dropdown-toggle.btn-success1 {
+  color: #ffffff !important;
+  background-color: #7ca923;
+  border-color: #558000;
+}
+
+.btn-success1:active,
+.btn-success1.active,
+.open .dropdown-toggle.btn-success1 {
+  background-image: none;
+}
+
+.btn-success1.disabled,
+.btn-success1[disabled],
+fieldset[disabled] .btn-success1,
+.btn-success1.disabled:hover,
+.btn-success1[disabled]:hover,
+fieldset[disabled] .btn-success1:hover,
+.btn-success1.disabled:focus,
+.btn-success1[disabled]:focus,
+fieldset[disabled] .btn-success1:focus,
+.btn-success1.disabled:active,
+.btn-success1[disabled]:active,
+fieldset[disabled] .btn-success1:active,
+.btn-success1.disabled.active,
+.btn-success1[disabled].active,
+fieldset[disabled] .btn-success1.active {
+  background-color: #99c73e;
+  border-color: #99c73e;
+}
+/*玫红风格*/
+.btn-meihong {
+  color: #ffffff !important;
+  background-color: #99c73e;
+  border-color: #99c73e;
+}
+
+.btn-meihong:hover,
+.btn-meihong:focus,
+.btn-meihong:active,
+.btn-meihong.active,
+.open .dropdown-toggle.btn-meihong {
+  color: #ffffff !important;
+  background-color: #7ca923;
+  border-color: #558000;
+}
+
+.btn-meihong:active,
+.btn-meihong.active,
+.open .dropdown-toggle.btn-meihong {
+  background-image: none;
+}
+
+.btn-meihong.disabled,
+.btn-meihong[disabled],
+fieldset[disabled] .btn-meihong,
+.btn-meihong.disabled:hover,
+.btn-meihong[disabled]:hover,
+fieldset[disabled] .btn-meihong:hover,
+.btn-meihong.disabled:focus,
+.btn-meihong[disabled]:focus,
+fieldset[disabled] .btn-meihong:focus,
+.btn-meihong.disabled:active,
+.btn-meihong[disabled]:active,
+fieldset[disabled] .btn-meihong:active,
+.btn-meihong.disabled.active,
+.btn-meihong[disabled].active,
+fieldset[disabled] .btn-meihong.active {
+  background-color: #99c73e;
+  border-color: #99c73e;
+}

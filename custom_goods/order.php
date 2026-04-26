@@ -1,0 +1,106 @@
+<?php
+$title = '自定义商品下单';
+require_once('../confing/common.php');
+require_once('functions.php');
+custom_goods_require_login();
+?>
+<link rel="stylesheet" href="../assets/css/bootstrap.css" type="text/css" />
+<link rel="stylesheet" href="../assets/element/element.css">
+<script src="../assets/js/vue.min.js"></script>
+<script src="../assets/js/vue-resource.min.js"></script>
+<script src="../assets/element/element.js"></script>
+<div class="app-content-body">
+  <div class="wrapper-md control" id="customGoodsOrder">
+    <div class="panel panel-default">
+      <div class="panel-heading font-bold layui-bg-blue">自定义商品下单</div>
+      <div class="panel-body">
+        <div class="form-group">
+          <label>选择商品</label>
+          <select class="form-control" v-model="cid" @change="selectGoods">
+            <option value="">请选择商品</option>
+            <option v-for="item in goods" :value="item.cid">{{item.name}} - {{item.price}}积分</option>
+          </select>
+        </div>
+        <div class="form-group" v-if="current.content">
+          <label>商品说明</label>
+          <textarea class="form-control" rows="3" v-model="current.content" disabled></textarea>
+        </div>
+        <div class="form-group">
+          <label>购买数量</label>
+          <input class="form-control" type="number" min="1" v-model="quantity">
+        </div>
+        <div class="form-group" v-for="field in fields" :key="field.name">
+          <label>{{field.label || field.name}}</label>
+          <select class="form-control" v-if="field.type == 'select'" v-model="input[field.name]">
+            <option value="">请选择</option>
+            <option v-for="option in field.options" :value="option.value || option">{{option.label || option}}</option>
+          </select>
+          <input v-else-if="field.type == 'integer'" class="form-control" type="number" step="1" v-model="input[field.name]" :placeholder="field.tips || ''">
+          <input v-else-if="field.type == 'decimal'" class="form-control" type="number" step="0.01" v-model="input[field.name]" :placeholder="field.tips || ''">
+          <input v-else-if="field.type == 'datetime'" class="form-control" type="datetime-local" v-model="input[field.name]">
+          <input v-else class="form-control" type="text" v-model="input[field.name]" :placeholder="field.tips || ''">
+        </div>
+        <p v-if="current.cid">预计扣费：<b style="color:red">{{totalPrice}}</b> 积分</p>
+        <button class="btn btn-primary" @click="submit">提交订单</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+new Vue({
+  el: '#customGoodsOrder',
+  data: {goods: [], cid: '', current: {}, fields: [], input: {}, quantity: 1},
+  computed: {
+    totalPrice: function() {
+      if (!this.current.price) return '0.00';
+      var total = parseFloat(this.current.price || 0);
+      var config = this.parseConfig();
+      var factors = (config.price_rule && config.price_rule.factors) || ['count'];
+      for (var i = 0; i < factors.length; i++) {
+        var key = factors[i];
+        if (key === 'count') {
+          total *= Math.max(1, parseFloat(this.quantity || 1));
+        } else {
+          var field = this.fields.find(function(f) { return f.name === key; });
+          if (field && (field.type === 'integer' || field.type === 'decimal')) {
+            total *= Math.max(0, parseFloat(this.input[key] || 0));
+          }
+        }
+      }
+      return total.toFixed(2);
+    }
+  },
+  methods: {
+    parseConfig: function() {
+      try { return JSON.parse(this.current.input_config || '{}'); } catch (e) { return {}; }
+    },
+    loadGoods: function() {
+      this.$http.post('/apisub.php?act=custom_goods_public_list', {}, {emulateJSON: true}).then(function(res) {
+        if (res.body.code == 1) this.goods = res.body.data || [];
+      });
+    },
+    selectGoods: function() {
+      this.current = this.goods.find(function(item) { return item.cid == this.cid; }.bind(this)) || {};
+      var config = this.parseConfig();
+      this.fields = config.fields || [];
+      this.input = {};
+    },
+    submit: function() {
+      if (!this.cid) { this.$message.error('请选择商品'); return; }
+      this.$http.post('/apisub.php?act=custom_goods_order_add', {
+        platform: this.cid,
+        quantity: this.quantity,
+        input_data: JSON.stringify(this.input)
+      }, {emulateJSON: true}).then(function(res) {
+        if (res.body.code == 1) {
+          this.$message.success('提交成功，订单ID：' + res.body.id);
+          this.input = {};
+        } else {
+          this.$message.error(res.body.msg || '提交失败');
+        }
+      });
+    }
+  },
+  mounted: function() { this.loadGoods(); }
+});
+</script>
