@@ -77,9 +77,26 @@ function custom_goods_decode_input_config($input_config)
     if (is_array($input_config)) {
         $config = $input_config;
     } else {
-        $config = json_decode((string)$input_config, true);
-        if (is_string($config)) {
-            $config = json_decode($config, true);
+        $raw = trim((string)$input_config);
+        $candidates = array(
+            $raw,
+            stripslashes($raw),
+            html_entity_decode($raw, ENT_QUOTES, 'UTF-8'),
+            stripslashes(html_entity_decode($raw, ENT_QUOTES, 'UTF-8'))
+        );
+        $config = null;
+        foreach ($candidates as $candidate) {
+            if ($candidate === '') {
+                continue;
+            }
+            $decoded = json_decode($candidate, true);
+            if (is_string($decoded)) {
+                $decoded = json_decode($decoded, true);
+            }
+            if (is_array($decoded)) {
+                $config = $decoded;
+                break;
+            }
         }
     }
     if (!is_array($config)) {
@@ -88,6 +105,7 @@ function custom_goods_decode_input_config($input_config)
     if (!isset($config['fields']) || !is_array($config['fields'])) {
         $config['fields'] = array();
     }
+    $config['fields'] = array_values($config['fields']);
     if (!isset($config['price_rule']) || !is_array($config['price_rule'])) {
         $config['price_rule'] = array('factors' => array('count'));
     }
@@ -212,7 +230,11 @@ function custom_goods_sync_from_upstream()
         }
         $name = custom_goods_escape(isset($item['name']) ? $item['name'] : '');
         $content = custom_goods_escape(isset($item['content']) ? $item['content'] : '');
-        $input_config = custom_goods_escape($input_config);
+        $decoded_config = custom_goods_decode_input_config($input_config);
+        if (empty($decoded_config['fields'])) {
+            continue;
+        }
+        $input_config = custom_goods_escape(json_encode($decoded_config, JSON_UNESCAPED_UNICODE));
         $cid = custom_goods_escape($cid);
         $price = floatval(isset($item['price']) ? $item['price'] : 0);
         $old = $DB->get_row("select * from qingka_custom_goods where upstream_cid='{$cid}' limit 1");

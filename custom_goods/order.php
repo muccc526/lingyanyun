@@ -75,14 +75,29 @@ new Vue({
   },
   methods: {
     parseConfig: function() {
-      var config = this.current.input_config_data || this.current.input_config || {};
+      var parsed = null;
+      var config = this.current.input_config_data || {};
+      if (typeof config === 'object' && config.fields && config.fields.length) {
+        return config;
+      }
+      config = this.current.input_config || {};
       if (typeof config === 'object') return config;
       try {
-        config = JSON.parse(config || '{}');
-        if (typeof config === 'string') config = JSON.parse(config);
-        return config || {};
+        parsed = JSON.parse(config || '{}');
+        if (typeof parsed === 'string') parsed = JSON.parse(parsed);
+        return parsed || {};
       } catch (e) {
-        return {};
+        try {
+          var normalized = String(config || '')
+            .replace(/&quot;/g, '"')
+            .replace(/&#34;/g, '"')
+            .replace(/\\"/g, '"');
+          parsed = JSON.parse(normalized || '{}');
+          if (typeof parsed === 'string') parsed = JSON.parse(parsed);
+          return parsed || {};
+        } catch (e2) {
+          return {};
+        }
       }
     },
     loadGoods: function() {
@@ -94,6 +109,9 @@ new Vue({
       this.current = this.goods.find(function(item) { return item.cid == this.cid; }.bind(this)) || {};
       var config = this.parseConfig();
       this.fields = config.fields || [];
+      if (!Array.isArray(this.fields)) {
+        this.fields = Object.keys(this.fields).map(function(key) { return this.fields[key]; }.bind(this));
+      }
       this.input = {};
       for (var i = 0; i < this.fields.length; i++) {
         var field = this.fields[i];
